@@ -15,3 +15,38 @@ class TicTacToe:
         number_board = [[str(i) for i in range(j*3, (j+1)*3)] for j in range(3)]
         for row in number_board:
             print('| ' + ' | '.join(row) + ' |' )
+
+    def available_moves(self):
+        return [i for i, spot in enumerate(self.board) if spot == ' ']
+        # OR
+        # moves = []
+        # for (i, spot) in enumerate(self.board):
+        #     # ['x', 'x', 'o'] --> [(0, 'x'), (1, 'x'), (2, 'o')]
+        #     if spot == ' ':  # empty space
+        #         moves.append(i) # append the index of the spot to moves since we want to know which empty spaces are available
+        # return moves
+
+    # funtion to check whether there are any ampty sqaures on the bord
+    def empty_squares(self):
+        return ' ' in self.board # returns a boolean of whether or not there are empty spaces on the board
+    
+    # funtion that counts number of empty squares on the board
+    def num_empty_squares(self):
+        return self.board.count(' ')
+
+def play(game, x_player, o_player, print_game=True): # print_game = True displays the steps when human player is playing against the computer
+    if print_game:
+        game.print_board_nums()
+
+    letter = 'X' # starting letter
+    # iterate while the game still has empty squares
+    # winner determined by that which breaks the loop
+    while game.empty_squares():
+        # get move from the appropriate player
+        if letter == 'O':
+            square = o_player.get_move(game)
+        else:
+            square = x_player.get_move(game)
+
+        # defining a function to make a move!
+        
