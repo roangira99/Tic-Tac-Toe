@@ -26,15 +26,44 @@ class TicTacToe:
         #         moves.append(i) # append the index of the spot to moves since we want to know which empty spaces are available
         # return moves
 
-    # funtion to check whether there are any ampty sqaures on the bord
+    # funtion to check whether there are any empty sqaures on the bord
     def empty_squares(self):
         return ' ' in self.board # returns a boolean of whether or not there are empty spaces on the board
     
     # funtion that counts number of empty squares on the board
     def num_empty_squares(self):
         return self.board.count(' ')
+    
+    # defining a function to make a move!
+    def make_move(self, square, letter):
+        # if valid move then make move (assign square to letter) then return true
+        # if invalid, return false
+        if self.board[square] == ' ':
+            self.board[square] = letter
+            # check whether there is a winner
+            if self.winner(square, letter):
+                self.current_winner = letter
+            return True
+        return False
+    
+    # function to check for a winner
+    def winner(self, square, letter):
+        # winner if 3 in a row anywhere.. we have to check all of these
+        # first let's check the row
+        row_ind = square // 3 # the row its at
+        row = self.board[row_ind*3 : (row_ind + 1) * 3] # getting a list of items in the row we've selected
+        if all([spot == letter for spot in row]): # if everything is true in this list
+            return True
+        
+        # check column
+        col_ind = square % 3 # the column we are in
+        column = [self.board[col_ind+i*3] for i in range(3)] # for every single row (i) if we add the column index we get every single value in that column to get our column
+        if all([spot == letter for spot in column]): # if everything is true in this list
+            return True
+
 
 def play(game, x_player, o_player, print_game=True): # print_game = True displays the steps when human player is playing against the computer
+    #returns the winner of the game(the letter) or None for a tie
     if print_game:
         game.print_board_nums()
 
@@ -48,5 +77,28 @@ def play(game, x_player, o_player, print_game=True): # print_game = True display
         else:
             square = x_player.get_move(game)
 
-        # defining a function to make a move!
-        
+        # making a move
+        if game.make_move(square, letter):
+            if print_game:
+                print(letter + ' makes a move to square {square}')
+                game.print_board() # new representation of the board where this spot has now been claimed by the user
+                print('')
+
+            # if there is a current winner, end the game
+            if game.current_winner:
+                if print_game:
+                    print(letter + ' wins!')
+                return letter
+
+            # after a user has made a move, we need to alternate letters
+            letter = 'O' if letter == 'X' else 'X' # switches players (condensed if-else statement)
+            # could alternatively be written like this:
+            # if letter == 'X
+            #     letter = 'O'
+            # else:
+            #     letter = 'X'
+
+        if print_game:
+            print('It\'s a tie!')
+
+
