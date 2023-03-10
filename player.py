@@ -30,7 +30,7 @@ class HumanPlayer(Player):
         valid_square = False
         val = None # User hasn't input a value yet when starting the game
         while not valid_square:
-            square = input(self.letter + '\'s turn. Input move (0-9):')
+            square = input(self.letter + '\'s turn. Input move (0-8):')
             # checking whether input is a valid number that player can put in
             try:
                 val = int(square) # If we can't cast the user input to an integer

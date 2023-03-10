@@ -1,3 +1,5 @@
+import time
+from player import HumanPlayer, RandomComputerPlayer
 # Creating the Tic Tac Toe board class
 class TicTacToe:
     def __init__(self):
@@ -52,15 +54,27 @@ class TicTacToe:
         # first let's check the row
         row_ind = square // 3 # the row its at
         row = self.board[row_ind*3 : (row_ind + 1) * 3] # getting a list of items in the row we've selected
-        if all([spot == letter for spot in row]): # if everything is true in this list
+        if all([spot == letter for spot in row]): # return true if everything in the row is equal to the letter
             return True
         
         # check column
         col_ind = square % 3 # the column we are in
         column = [self.board[col_ind+i*3] for i in range(3)] # for every single row (i) if we add the column index we get every single value in that column to get our column
-        if all([spot == letter for spot in column]): # if everything is true in this list
+        if all([spot == letter for spot in column]): # return true if everything in the column is equal to the letter
             return True
-
+        
+        # check diagonals
+        # but only if the square is an even number (0, 2, 4, 6, 8)
+        # these are the only moves possible to win in a diagonal
+        if square % 2 ==0: # if the number is even
+            diagonal1 = [self.board[i] for i in [0, 4, 8]] # left to right diagonal
+            if all([spot == letter for spot in diagonal1]): # return true if everything in the column is equal to the letter
+                return True
+            diagonal2 = [self.board[i] for i in [2, 4, 6]] # right to left diagonal
+            if all([spot == letter for spot in diagonal2]): # return true if everything in the column is equal to the letter
+                return True
+        # if all of these fail
+        return False
 
 def play(game, x_player, o_player, print_game=True): # print_game = True displays the steps when human player is playing against the computer
     #returns the winner of the game(the letter) or None for a tie
@@ -80,7 +94,7 @@ def play(game, x_player, o_player, print_game=True): # print_game = True display
         # making a move
         if game.make_move(square, letter):
             if print_game:
-                print(letter + ' makes a move to square {square}')
+                print(letter + f' makes a move to square {square}')
                 game.print_board() # new representation of the board where this spot has now been claimed by the user
                 print('')
 
@@ -98,7 +112,14 @@ def play(game, x_player, o_player, print_game=True): # print_game = True display
             # else:
             #     letter = 'X'
 
-        if print_game:
-            print('It\'s a tie!')
+        time.sleep(0.8) # add a delay before displaying opponent move
 
+    if print_game:
+        print('It\'s a tie!')
+
+if __name__ == '__main__':
+    x_player = HumanPlayer('X') # aasign letter X to human player
+    o_player = RandomComputerPlayer('O') # aasign letter O to computer player
+    t = TicTacToe()
+    play(t, x_player, o_player, print_game=True)
 
